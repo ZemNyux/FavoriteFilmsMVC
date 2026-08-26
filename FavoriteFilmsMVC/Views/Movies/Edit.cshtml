@@ -1,0 +1,33 @@
+@model FavoriteFilmsMVC.Models.Movie
+
+<h2>Редактировать фильм</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Название</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Director" class="form-label">Режиссёр</label>
+        <input asp-for="Director" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="ReleaseYear" class="form-label">Год выпуска</label>
+        <input asp-for="ReleaseYear" class="form-control" type="number" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Genre" class="form-label">Жанр</label>
+        <input asp-for="Genre" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="PosterUrl" class="form-label">Ссылка на постер</label>
+        <input asp-for="PosterUrl" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Описание</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>
