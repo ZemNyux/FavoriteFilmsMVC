@@ -1,12 +1,26 @@
-﻿namespace FavoriteFilmsMVC.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
-public class Movie
+namespace FavoriteFilmsMVC.Models
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Director { get; set; } = string.Empty;
-    public string Genre { get; set; } = string.Empty;
-    public int ReleaseYear { get; set; }
-    public string PosterUrl { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public class Movie
+    {
+        public int Id { get; set; }
+
+        public string Title { get; set; } = string.Empty;
+
+        public string Director { get; set; } = string.Empty;
+
+        public int ReleaseYear { get; set; }
+
+        public string Genre { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+
+        public string? PosterUrl { get; set; }
+
+        [NotMapped]
+        public IFormFile? PosterFile { get; set; }
+    }
 }

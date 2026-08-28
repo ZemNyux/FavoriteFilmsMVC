@@ -8,9 +8,12 @@ namespace FavoriteFilmsMVC.Controllers
     {
         private readonly AppDbContext _context;
 
-        public MoviesController(AppDbContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public MoviesController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -33,10 +36,26 @@ namespace FavoriteFilmsMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Director,ReleaseYear,Genre,Description,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Create(Movie movie)
         {
+            ModelState.Remove("PosterUrl");
+
             if (ModelState.IsValid)
             {
+                if (movie.PosterFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + movie.PosterFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await movie.PosterFile.CopyToAsync(stream);
+                    }
+
+                    movie.PosterUrl = "/images/" + uniqueFileName;
+                }
+
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -54,7 +73,7 @@ namespace FavoriteFilmsMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Director,ReleaseYear,Genre,Description,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, Movie movie)
         {
             if (id != movie.Id) return NotFound();
 
@@ -62,6 +81,20 @@ namespace FavoriteFilmsMVC.Controllers
             {
                 try
                 {
+                    if (movie.PosterFile != null)
+                    {
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + movie.PosterFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await movie.PosterFile.CopyToAsync(stream);
+                        }
+
+                        movie.PosterUrl = "/images/" + uniqueFileName;
+                    }
+
                     _context.Update(movie);
                     await _context.SaveChangesAsync();
                 }
