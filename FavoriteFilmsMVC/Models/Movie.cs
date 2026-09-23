@@ -38,6 +38,7 @@ namespace FavoriteFilmsMVC.Models
         [Display(Name = "Опис")]
         public string? Description { get; set; }
 
+        [Url(ErrorMessage = "Вкажіть коректну адресу зображення.")]
         [Display(Name = "Посилання на постер")]
         public string? PosterUrl { get; set; }
 
