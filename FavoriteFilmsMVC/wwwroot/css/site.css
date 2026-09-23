@@ -29,3 +29,54 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+.input-validation-error {
+    border: 2px solid #e74c3c !important;
+    background-color: #fdf2f2;
+}
+
+.validation-message,
+.field-validation-error {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+    .validation-message::before,
+    .field-validation-error::before {
+        content: "!";
+        font-size: 0.85rem;
+    }
+
+.alert-summary,
+.validation-summary-errors {
+    background-color: #fde8e8;
+    border-left: 4px solid #e74c3c;
+    color: #9b1c1c;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 200px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

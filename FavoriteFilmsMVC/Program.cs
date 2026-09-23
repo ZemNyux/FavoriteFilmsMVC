@@ -30,9 +30,8 @@ public class Program
         app.MapStaticAssets();
 
         app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-            .WithStaticAssets();
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
         using (var scope = app.Services.CreateScope())
         {

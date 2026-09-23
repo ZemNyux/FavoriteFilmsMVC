@@ -2,38 +2,56 @@
 
 <h2>Редактировать фильм</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <input type="hidden" asp-for="Id"/>
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Название</label>
-        <input asp-for="Title" class="form-control"/>
+    <div class="form-group mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Director" class="form-label">Режиссёр</label>
-        <input asp-for="Director" class="form-control"/>
+
+    <div class="form-group mb-3">
+        <label asp-for="Director"></label>
+        <input asp-for="Director" class="form-control" />
+        <span asp-validation-for="Director" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="ReleaseYear" class="form-label">Год выпуска</label>
-        <input asp-for="ReleaseYear" class="form-control" type="number"/>
+
+    <div class="form-group mb-3">
+        <label asp-for="Genre"></label>
+        <input asp-for="Genre" class="form-control" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Genre" class="form-label">Жанр</label>
-        <input asp-for="Genre" class="form-control"/>
+
+    <div class="form-group mb-3">
+        <label asp-for="ReleaseYear"></label>
+        <input asp-for="ReleaseYear" class="form-control" />
+        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="PosterUrl" class="form-label">Ссылка на постер</label>
-        <input asp-for="PosterUrl" class="form-control"/>
+
+    <div class="form-group mb-3">
+        <label asp-for="Rating"></label>
+        <input asp-for="Rating" class="form-control" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Описание</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+
+    <div class="form-group mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="PosterFile" class="form-label">Постер с устройства</label>
-        <input asp-for="PosterFile" type="file" class="form-control" />
+
+    <div class="form-group mb-3">
+        <label asp-for="PosterUrl"></label>
+        <input asp-for="PosterUrl" class="form-control" />
+        <span asp-validation-for="PosterUrl" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Сохранить</button>
     <a asp-action="Index" class="btn btn-secondary">Отмена</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

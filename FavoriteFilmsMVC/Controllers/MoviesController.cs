@@ -8,54 +8,43 @@ namespace FavoriteFilmsMVC.Controllers
     {
         private readonly AppDbContext _context;
 
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public MoviesController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+        public MoviesController(AppDbContext context)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
         }
 
+        // GET: Movies
         public async Task<IActionResult> Index()
         {
             return View(await _context.Movies.ToListAsync());
         }
 
+        // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
+
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null) return NotFound();
+
             return View(movie);
         }
 
+        // GET: Movies/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Movies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
-            ModelState.Remove("PosterUrl");
+            ModelState.Remove("PosterFile");
 
             if (ModelState.IsValid)
             {
-                if (movie.PosterFile != null)
-                {
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + movie.PosterFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await movie.PosterFile.CopyToAsync(stream);
-                    }
-
-                    movie.PosterUrl = "/images/" + uniqueFileName;
-                }
-
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -63,59 +52,47 @@ namespace FavoriteFilmsMVC.Controllers
             return View(movie);
         }
 
+        // GET: Movies/Edit/5 (Загружает форму редактирования)
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
+
             var movie = await _context.Movies.FindAsync(id);
             if (movie == null) return NotFound();
+
             return View(movie);
         }
 
+        // POST: Movies/Edit/5 (Сохраняет изменения в базу)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Movie movie)
         {
             if (id != movie.Id) return NotFound();
 
+            ModelState.Remove("PosterFile");
+
             if (ModelState.IsValid)
             {
-                try
-                {
-                    if (movie.PosterFile != null)
-                    {
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + movie.PosterFile.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await movie.PosterFile.CopyToAsync(stream);
-                        }
-
-                        movie.PosterUrl = "/images/" + uniqueFileName;
-                    }
-
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Movies.Any(e => e.Id == movie.Id)) return NotFound();
-                    else throw;
-                }
+                _context.Update(movie);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
         }
 
+        // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
+
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null) return NotFound();
+
             return View(movie);
         }
 
+        // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
